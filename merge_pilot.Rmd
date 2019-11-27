@@ -1,0 +1,39 @@
+---
+title: "Merge 2018 taxi dataset & generate pilot dataset"
+date: "11/13/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+read in & merge 12 month's data into one:
+```{r}
+
+file_names <- list.files("./data/yellow_cab")
+read_in = function(x) {
+  read_csv("./data/yellow_cab/x") 
+}
+setwd("./data/yellow_cab")
+taxi_2018 <-
+  file_names %>% 
+  set_names() %>% 
+  map_dfr(read_csv, .id = "source") %>% 
+  separate(source, c("a","b","year", "month", "c"), sep = "([\\.\\_])") %>% 
+  select(-a, -b, -c, -X1)
+
+```
+
+Export the pilot dataset:
+```{r}
+set.seed(1)
+pilot <-
+  taxi_2018 %>% 
+  sample_frac(0.1)
+
+pilot %>% 
+  write.csv(.,file = "./data/pilot.csv")
+```
+
