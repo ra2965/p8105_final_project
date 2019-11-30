@@ -1,0 +1,14 @@
+---
+title: "regression analysis"
+output: github_document
+---
+
+```{r}
+
+
+
+
+
+
+```
+
