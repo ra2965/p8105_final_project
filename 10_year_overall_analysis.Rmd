@@ -27,6 +27,38 @@ scale_fill_discrete = scale_fill_viridis_d
 theme_set(theme_minimal() + theme(legend.position = "bottom"))
 ```
 
+### 1. Data Import and Tidy
+
+
+```{r overall_df, message=FALSE}
+file_name = list.files(path = "data/yearly_summary", pattern = "_taxi_trip_summary")
+
+overall_df_raw = map(.x = file_name, ~ read_csv(str_c("data/yearly_summary/", .x))) 
+
+overall_df = 
+  overall_df_raw %>% 
+  bind_rows() %>%
+  mutate(
+    time = str_remove(file, "yellow_tripdata_"),
+    time = str_remove(time, ".csv"),
+    total_ride_million = total_ride/1000000,
+    total_passenger_million = total_passenger/1000000,
+    total_fare_million = total_fare/1000000) %>% 
+  separate(time, into = c("year", "month"), sep = "_", remove = TRUE) %>%
+  filter(year != 2018) %>% 
+  select(year, month, total_ride_million, total_passenger_million, total_fare_million, mean_fare, median_fare)
+
+overall_df
+```
+
+### 2. 10-Year Overall Analysis
+
+
+
+
+
+
+
 
 
 
